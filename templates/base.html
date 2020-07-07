@@ -11,9 +11,32 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
       integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
       crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
 </head>
 <body>
     <div class="container">
+        <div class="col-sm-12 pt-4">
+            {% if user.is_authenticated %}
+                <div class="row">
+                    <span>
+                        <img class="rounded d-inline" src="">
+                        {{ user.username }}
+                    </span>
+                    <div class="text-right ml-auto">
+                        <a class="btn btn-primary d-inline">Написать статью</a>
+                        <a class="btn btn-light d-inline" href="{% url 'logout' %}">Выйти</a>
+                    </div>
+                </div>
+            {% else %}
+                 <div class="text-right">
+                     <a class="btn btn-light mr-1 d-inline"
+                        href="{% url 'login_page' %}">Войти</a>
+                     <a class="btn btn-primary d-inline"
+                        href="{% url 'registration_page' %}">Зарегистрироваться</a>
+                 </div>
+            {% endif %}
+        </div>
         {% block body %}
         {% endblock %}
     </div>
