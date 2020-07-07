@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}
+    Создание статьи
+{% endblock %}
+
+{% block body %}
+<div class="col-md-10 col-sm-12">
+    <form action="" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="">Тема</label>
+            {{ form.subject }}
+        </div>
+        <div class="form-group">
+            <label for="">Текст</label>
+            {{ form.text }}
+        </div>
+        <div>
+            <a class="btn btn-light" href="{% url 'index' %}">Отмена</a>
+            <button class="btn btn-primary" type="submit">Сохранить</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

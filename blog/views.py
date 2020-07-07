@@ -1,8 +1,9 @@
+from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from django.shortcuts import render
-
-# Create your views here.
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib import messages
 from django.views.decorators.http import require_http_methods
+from blog.forms import ArticleForm
 from blog.models import Article
 
 
@@ -17,7 +18,6 @@ def show_articles(request):
     :parameter page: show page number; default = 1
     :parameter page_length: show how much articles will be on page; default = 12
     """
-
     args = {}
     page = 1
     page_length = 12
@@ -25,7 +25,7 @@ def show_articles(request):
         page = int(request.GET.get('page'))
     if request.GET.get('page_length'):
         page_length = int(request.GET.get('page_length'))
-    article_query = Article.objects.all()
+    article_query = Article.objects.all().order_by('publication_date').reverse()
     paginator = Paginator(article_query, page_length)
     articles = paginator.page(page)
     paginator.page_lrange = range(1, paginator.num_pages + 1)
@@ -35,20 +35,47 @@ def show_articles(request):
     return render(request, 'articles.html', args)
 
 
-def article_view(request, article_id):
-    if request.method == 'POST':
-        pass
-    elif request.method == 'GET':
-        pass
-    elif request.method == 'PUT':
-        pass
-    elif request.method == 'DELETE':
-        pass
-
-
 def get_article(request, article_id):
     args = {}
-    article = Article.objects.get(id=article_id)
+    article = get_object_or_404(Article, id=article_id)
     args['article'] = article
     return render(request, 'article.html', args)
 
+
+@login_required
+def create_article(request):
+    args = {}
+    form = ArticleForm()
+    if request.POST:
+        form = ArticleForm(data=request.POST)
+        if form.is_valid():
+            article = form.save(commit=False)
+            article.author = request.user
+            article.save()
+            messages.add_message(request, messages.INFO, 'Статья опубликована')
+            return redirect('index')
+    args['form'] = form
+    return render(request, 'cr_up_article_page.html', args)
+
+
+@login_required
+def update_article(request, article_id):
+    args = {}
+    article = get_object_or_404(Article, id=article_id)
+    form = ArticleForm(instance=article)
+    if request.POST:
+        form = ArticleForm(data=request.POST, instance=article)
+        if form.is_valid():
+            form.save()
+            messages.add_message(request, messages.INFO, 'Успешно изменено')
+            return redirect('index')
+    args['form'] = form
+    return render(request, 'cr_up_article_page.html', args)
+
+
+@login_required
+def delete_article(request, article_id):
+    article = get_object_or_404(Article, id=article_id)
+    article.delete()
+    messages.add_message(request, messages.INFO, 'Успешно удалёно')
+    return redirect('index')

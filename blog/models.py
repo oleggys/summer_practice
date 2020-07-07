@@ -9,10 +9,10 @@ class Article(models.Model):
     class Meta:
         verbose_name = 'Статья'
 
-    author = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
     subject = models.CharField('Заголовок', max_length=150)
     text = models.TextField('Текст статьи')
-    publication_date = models.DateTimeField('', auto_now=True)
+    publication_date = models.DateTimeField('', auto_now_add=True)
 
     def get_short_text(self):
         return self.text[:250]

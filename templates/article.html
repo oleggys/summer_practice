@@ -3,7 +3,22 @@
     {{ article.subject }}
 {% endblock %}
 {% block body %}
-    <div>
-        {{ article.text }}
+    {% if article.author == user %}
+        <div class="col-sm-12">
+            <div class="m-auto">
+                <a class="btn btn-light" href="{% url 'article_update' article.id %}">Изменить</a>
+                <a class="btn btn-light" href="{% url 'article_delete' article.id %}">Удалить</a>
+            </div>
+        </div>
+    {% endif %}
+    <div class="col-md-10 col-sm-12 m-auto">
+        <h1>
+        {{ article.subject }}
+        </h1>
+        <h5>{{ article.author.username }}, {{ article.publication_date|date:"d M Y" }}</h5>
+        <div>
+            {{ article.text }}
+        </div>
+        <a class="m-auto" href="{% url 'index' %}">Вернуться к другим новостям</a>
     </div>
 {% endblock %}

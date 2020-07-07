@@ -24,7 +24,7 @@
                         {{ user.username }}
                     </span>
                     <div class="text-right ml-auto">
-                        <a class="btn btn-primary d-inline">Написать статью</a>
+                        <a class="btn btn-primary d-inline" href="{% url 'article_creation' %}">Написать статью</a>
                         <a class="btn btn-light d-inline" href="{% url 'logout' %}">Выйти</a>
                     </div>
                 </div>
