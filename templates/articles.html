@@ -17,7 +17,7 @@
                 <a href="{% url 'article' article.id %}">
                     <div>
                         <h5>{{ article.subject }}</h5>
-                        <div>{{ article.publication_date }}</div>
+                        <div>{{ article.author.username }} - {{ article.publication_date }}</div>
                         <p>{{ article.get_short_text }}</p>
                     </div>
                 </a>

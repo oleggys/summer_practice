@@ -3,6 +3,8 @@ from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from django.views.decorators.http import require_http_methods
+
+from blog.decorators import author_only
 from blog.forms import ArticleForm
 from blog.models import Article
 
@@ -59,6 +61,7 @@ def create_article(request):
 
 
 @login_required
+@author_only
 def update_article(request, article_id):
     args = {}
     article = get_object_or_404(Article, id=article_id)
@@ -74,6 +77,7 @@ def update_article(request, article_id):
 
 
 @login_required
+@author_only
 def delete_article(request, article_id):
     article = get_object_or_404(Article, id=article_id)
     article.delete()
